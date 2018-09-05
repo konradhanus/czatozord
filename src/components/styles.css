@@ -1,0 +1,220 @@
+body {
+    background-image: url("rsc/bg-login.jpg");
+    background-size: cover;
+}
+
+#rememberme {
+    float: left;
+}
+
+#noacc {
+    text-align: right;
+}
+
+.login-form {
+    margin-top: 90px;
+    padding: 10px;
+    box-shadow: 0px 0px 10px 1px grey;
+    border-radius: 10px;
+    padding-bottom: 20px;
+    background: white;
+    max-width: 450px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.title {
+    padding: 10px;
+    text-align: center;
+}
+
+.register-form {
+    margin-top: 90px;
+    padding: 10px;
+    box-shadow: 0px 0px 10px 1px grey;
+    border-radius: 10px;
+    padding-bottom: 20px;
+    background: white;
+    max-width: 450px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.video-win {
+    margin-top: 5px;
+    padding: 10px;
+    box-shadow: 0px 0px 10px 1px grey;
+    border-radius: 10px;
+    padding-bottom: 20px;
+    background: white;
+    opacity: 0.8;
+}
+
+.chat-win {
+    margin-top: 5px;
+    padding: 10px;
+    box-shadow: 0px 0px 10px 1px grey;
+    border-radius: 10px;
+    padding-bottom: 20px;
+    background: white;
+    min-height: 700px;
+    max-height: 100px;
+    opacity: 0.8;
+    border-radius: 10px 10px 0px 0px;
+    margin-bottom: -5px;
+    box-shadow: 0px -2px 10px 0px grey;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.msg-send {
+    margin-top: 5px;
+    padding: 10px;
+    box-shadow: 0px 0px 10px 1px grey;
+    border-radius: 10px;
+    padding-bottom: 20px;
+    background: white;
+    min-height: 128px;
+    border-radius: 0px 0px 10px 10px;
+    box-shadow: -3px 5px 10px -2px grey;
+    opacity: 0.8;
+}
+
+#msg-txt-area {
+resize: none;
+}
+
+.btn-send-msg {
+    margin-top: 10px;
+    float: right;
+    margin-bottom: -5px;
+
+}
+
+.users-win {
+    margin-top: 5px;
+    padding: 10px;
+    box-shadow: -3px 5px 10px -2px grey;
+    border-radius: 0px 0px 0px 10px;
+    padding-bottom: 20px;
+    background: white;
+    max-height: 697px;
+    opacity: 0.8;
+    overflow: auto;
+}
+
+.users-title {
+
+    margin-top: 5px;
+    padding: 10px;
+    box-shadow: 0px -2px 10px 0px grey;
+    border-radius: 10px 10px 0px 0px;
+    margin-bottom: -5px;
+    background: white;
+    opacity: 0.8;
+    overflow: auto;
+}
+
+#chatname {
+    text-align: left;
+    float: left;
+}
+
+.nav-link {
+    float: left;
+}
+
+.nav-link {
+    color: black;
+    padding-top: 17px;
+}
+
+.navbar {
+    opacity: 0.8;
+    border-radius: 10px;
+    margin-top: 5px;
+    padding: 10px;
+    box-shadow: 0px 0px 10px 1px grey;
+    border-radius: 10px;
+    padding-bottom: 20px;
+    background: white;
+    display: block;
+    opacity: 0.8;
+}
+
+.navbar-brand {
+    float: left;
+
+}
+
+.footer {
+    text-align: center;
+    padding: 20px;
+    color: aliceblue;
+}
+
+
+
+.title {
+    text-align: left;
+}
+
+.conversation {
+
+    margin-top: 3px;
+    margin-bottom: 3px;
+    width: fit-content;
+    max-width: 50%;
+    height: auto;
+    background-color: #eee;
+    border-radius: 10px;
+    padding: 10px; 
+}
+
+.conversation-client {
+    background-color: #eee;
+}
+
+.conversation-host {
+    float: right;
+    background-color:#007bff;
+    color: white;
+    clear: both;
+    
+}
+
+.brk-line {
+    clear: both;
+}
+
+.avatar-left {
+
+     margin-top: 3px;
+     margin-bottom: 3px;
+     width: auto;
+     max-width: 40%;
+     height: auto;
+     background-color: #eee;
+     border-radius: 10px;
+     padding: 10px;
+     float: left;
+}
+
+.avatar-rounded {
+    border-radius: 20%;
+    max-width: 35px;
+    max-height: 35px;
+
+}
+
+.btns-misc {
+    margin-top: 10px;
+    float: left;
+    margin-bottom: -5px;
+}
+
+.btn:hover {
+    background-color: RoyalBlue;
+}
