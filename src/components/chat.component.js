@@ -8,10 +8,11 @@ import Footer from './footer/footer.component';
 
 class Chat extends Component {
   render() {
+    console.log(this.props.users);
     return (
       <div className="container-fluid">
         <Header />
-        <Content />
+        <Content users={this.props.users}/>
         <Footer />
       </div>
     );

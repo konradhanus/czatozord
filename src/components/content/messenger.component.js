@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
 
 class Messenger extends Component {
+
+
+  /*constructor(){
+    this.state = {
+      messages: [{}, ]
+    }
+  }*/
+
   render() {
     return (
       <React.Fragment>

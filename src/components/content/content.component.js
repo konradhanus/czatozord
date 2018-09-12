@@ -6,6 +6,7 @@ import Users from './users.component';
 
 class Content extends Component {
   render() {
+    console.log(this.props.users);
     return (
       <div className="row">
         <div className="col-lg-5">
@@ -15,7 +16,7 @@ class Content extends Component {
           <Messenger />
         </div>
         <div className="col-lg-2">
-          <Users />
+          <Users users={this.props.users} />
         </div>
       </div>
     );
