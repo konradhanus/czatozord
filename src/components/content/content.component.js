@@ -6,7 +6,6 @@ import Users from './users.component';
 
 class Content extends Component {
   render() {
-    console.log(this.props.users);
     return (
       <div className="row">
         <div className="col-lg-5">

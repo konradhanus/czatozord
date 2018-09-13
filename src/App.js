@@ -4,25 +4,24 @@ import './App.css';
 import Chat from './components/chat.component';
 
 class App extends Component {
-    state = {
-      users: [
-        {
-          name: 'Konrad Hanus'
-        },
-        {
-          name: 'Adam Rusnak'
-        },
-        {
-          name: 'Łukasz Kobierski'
-        },
-        {
-          name: 'Jan Różycki'
-        }
-      ]
-    }
+  state = {
+    users: [
+      {
+        name: 'Konrad Hanus',
+      },
+      {
+        name: 'Igor Róg'
+      },
+      {
+        name: 'Łukasz Kobierski'
+      },
+      {
+        name: 'Adam Rusnak'
+      }
+    ]
+  }
   
   render() {
-    console.log(this.state.users);
     return (
       <React.Fragment>
         <Chat users={this.state.users}/>
