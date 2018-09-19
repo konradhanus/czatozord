@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { selectUser, addUser } from './users.actions'
 
 class Users extends Component {
   displayUser(i, e) {
-    alert(this.refs["user"+i].innerHTML);
+    const user = {
+      name: this.refs["user"+i].innerHTML
+    };
+
+    this.props.selectUser(user);
   }
 
   renderUsers(users) {
@@ -13,6 +20,15 @@ class Users extends Component {
         </li>)
       )
     )
+  }
+
+  addUser() {
+    var user = {
+      name: this.refs.addUser.value
+    }
+
+    this.props.addUser(user);
+    this.refs.addUser.value = '';
   }
   
   render() {
@@ -29,9 +45,33 @@ class Users extends Component {
             </ul>
           </div>
         </div>
+        <div className="new-user">
+          <h6 className="title">Nowy użytkownik:</h6>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Wpisz nazwę"
+            ref="addUser" />
+          <button
+            type="button"
+            className="btn btn-primary"
+            onClick={() => this.addUser()}>
+            Dodaj
+          </button>
+        </div>
       </React.Fragment>
     );
   }
 }
 
-export default Users;
+const mapStateToProps = (state) => {
+  return {
+    users: state.users
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({ selectUser, addUser }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Users);

@@ -105,6 +105,26 @@ resize: none;
     overflow: auto;
 }
 
+.new-user {
+    margin-top: 5px;
+    padding: 10px;
+    box-shadow: -3px 5px 10px -2px grey;
+    border-radius: 10px 10px 10px 10px;
+    padding-bottom: 20px;
+    background: white;
+    max-height: 697px;
+    opacity: 0.8;
+    overflow: auto;
+}
+
+.new-user input {
+    margin-bottom: 10px;
+}
+
+.new-user button {
+    float: right;
+}
+
 .users-title {
 
     margin-top: 5px;
