@@ -15,7 +15,7 @@ class Content extends Component {
           <Messenger />
         </div>
         <div className="col-lg-2">
-          <Users users={this.props.users} />
+          <Users />
         </div>
       </div>
     );

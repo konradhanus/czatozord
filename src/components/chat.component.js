@@ -11,7 +11,7 @@ class Chat extends Component {
     return (
       <div className="container-fluid">
         <Header />
-        <Content users={this.props.users} />
+        <Content />
         <Footer />
       </div>
     );
