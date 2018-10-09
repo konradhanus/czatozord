@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 import Video from './video.component';
-import Messenger from './messenger.component';
-import Users from './users.component';
+import Messenger from './messenger/messenger.component';
+import Users from './users.firebase.component';
 
 class Content extends Component {
   render() {
