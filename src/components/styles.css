@@ -125,6 +125,11 @@ resize: none;
     float: right;
 }
 
+.user-highlight {
+    font-weight: 600;
+    color: #007bff;
+}
+
 .users-title {
 
     margin-top: 5px;

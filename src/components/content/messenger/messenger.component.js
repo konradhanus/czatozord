@@ -1,33 +1,9 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { addMessage } from './messenger.actions';
 
 class Messenger extends Component {
-  state = {
-    messages: [
-      {
-        text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue, suscipit a, scelerisque
-        sed, lacinia in, mi. Cras vel lorem. Etiam pellentesque aliquet tellus. Phasellus pharetra nulla
-        ac diam. Quisque semper justo at risus. Donec venenatis, turpis vel hendrerit interdum, dui ligula
-        ultricies purus, sed posuere libero dui id orci. Nam congue, pede vitae dapibus aliquet, elit
-        magna vulputate arcu, vel tempus metus leo non est. Etiam sit amet lectus quis est congue mollis.`,
-        isHost: false
-      },
-      {
-        text: `Quisque semper justo at risus. Donec venenatis, turpis vel hendrerit interdum, dui ligula ultricies purus, sed posuere libero
-        dui id orci. Quisque semper justo at risus. Donec venenatis, turpis vel hendrerit interdum, dui ligula
-        ultricies purus, sed posuere libero dui id orci.`,
-        isHost: true
-      },
-      {
-        text: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nibh augue, suscipit a, scelerisque
-        sed, lacinia in, mi. Cras vel lorem. Etiam pellentesque aliquet tellus. Phasellus pharetra nulla
-        ac diam. Quisque semper justo at risus. Donec venenatis, turpis vel hendrerit interdum, dui ligula
-        ultricies purus, sed posuere libero dui id orci. Nam congue, pede vitae dapibus aliquet, elit
-        magna vulputate arcu, vel tempus metus leo non est. Etiam sit amet lectus quis est congue mollis.`,
-        isHost: false
-      }
-    ]
-  }
-
   renderMessages (messages) {
     return (
       messages.map((message, i) => {
@@ -53,23 +29,24 @@ class Messenger extends Component {
   }
 
   addMessage() {
-    var newMessage = { text: this.refs.message.value, isHost: true };
+    const { peer } = this.props;
     
-    this.setState(prevState => ({
-      messages: [...prevState.messages, newMessage]
-    }));
-
+    var newMessage = { text: this.refs.message.value, isHost: true };
+    this.props.addMessage(newMessage);
+    peer.send(this.refs.message.value);
     this.refs.message.value = '';
   }
   render() {
+    const { messages } = this.props;
+
     return (
       <React.Fragment>
         <div className="chat-win">
-          {this.renderMessages(this.state.messages)}
+          {this.renderMessages(messages)}
         </div>
 
         <div className="msg-send">
-          <textarea className="form-control" ref="message" placeholder="Twoja wiadomość" rows={2} id="msg-txt-area" defaultValue={""} />
+          <textarea className="form-control" ref="message" ref="message" placeholder="Twoja wiadomość" rows={2} id="msg-txt-area" defaultValue={""} />
           <div className="btns-misc">
             <button className="btn" data-toggle="tooltip" data-placement="left" title="Wstaw emotikon">
               <i className="fa fa-smile-o" />
@@ -93,4 +70,15 @@ class Messenger extends Component {
   }
 }
 
-export default Messenger;
+const mapStateToProps = (state) => {
+  return {
+    messages: state.messages,
+    peer: state.peer
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({ addMessage }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Messenger);
