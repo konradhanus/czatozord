@@ -22,40 +22,51 @@ class Users extends Component {
   }
 
   componentDidMount() {
-    this.state.firebase.database.ref('users').on('value', (snapshot) => {
-      const newUsers = snapshot.val();
-      this.setState({ users: newUsers });
+    navigator.getUserMedia({video: true, audio: true}, 
+      (stream) => {
+        this.state.firebase.database.ref('users').on('value', (snapshot) => {
+          const newUsers = snapshot.val();
+          this.setState({ users: newUsers });
+    
+          if (this.props.myFirebaseKey) {
+            const { yourStun } = this.state;
+            const { peer } = this.props;
+    
+            var myself = newUsers[this.props.myFirebaseKey];
+            if (myself.callingUserKey && (!yourStun || myself.callingUserStun.sdp != yourStun.sdp)) {
+              this.setState({
+                yourStun: myself.callingUserStun,
+                callingUserKey: myself.callingUserKey
+               });
+              peer.signal(myself.callingUserStun);
+            }
+          }
+        });
 
-      if (this.props.myFirebaseKey) {
-        const { yourStun } = this.state;
-        const { peer } = this.props;
+        this.props.peer.on('signal', stun => {
+          const { callingUserKey } = this.state;
+    
+          this.setState({ myStun: stun });
+          
+          var userRef = this.state.firebase.database.ref(`users/${callingUserKey}`);
+          userRef.update({
+            callingUserStun: stun,
+            callingUserKey: this.props.myFirebaseKey
+          });
+        });
+    
+        this.props.peer.on('data', (data) => this.receiveMessage(data, this.props.addMessage));
+        
+        
+        this.props.peer.on('connect', () => {
+          this.props.peer.addStream(stream);
+        });
 
-        var myself = newUsers[this.props.myFirebaseKey];
-        if (myself.callingUserKey && (!yourStun || myself.callingUserStun.sdp != yourStun.sdp)) {
-          this.setState({
-            yourStun: myself.callingUserStun,
-            callingUserKey: myself.callingUserKey
-           });
-          peer.signal(myself.callingUserStun);
-        }
-      }
-    });
-
-    this.props.peer.on('signal', stun => {
-      const { callingUserKey } = this.state;
-
-      this.setState({ myStun: stun });
-      
-      var userRef = this.state.firebase.database.ref(`users/${callingUserKey}`);
-      userRef.update({
-        callingUserStun: stun,
-        callingUserKey: this.props.myFirebaseKey
-      });
-    });
-
-    this.props.peer.on('data', (data) => this.receiveMessage(data, this.props.addMessage));
-
-    this.props.updatePeer(this.props.peer);
+        this.props.peer.on('stream', (stream) => this.playVideo(stream));
+        this.props.updatePeer(this.props.peer);
+      },
+      (error) => {console.log(error)}
+    );
   }
 
   receiveMessage(data, addMessage) {
@@ -67,23 +78,36 @@ class Users extends Component {
   }
 
   connectToUser(userId) {
-    const peer = new Peer({
-      initiator: true,
-      trickle: false
-    });
-
-    var userRef = this.state.firebase.database.ref(`users/${userId}`);
-    peer.on('signal', stun => {
-      this.setState({myStun: stun});
-      userRef.update({
-        callingUserStun: stun,
-        callingUserKey: this.props.myFirebaseKey
+    navigator.getUserMedia({video: true, audio: true}, 
+    (stream)=> {
+      const peer = new Peer({
+        initiator: true,
+        trickle: false,
+        stream: stream
       });
-    });
+  
+      var userRef = this.state.firebase.database.ref(`users/${userId}`);
+      peer.on('signal', stun => {
+        this.setState({myStun: stun});
+        userRef.update({
+          callingUserStun: stun,
+          callingUserKey: this.props.myFirebaseKey
+        });
+      });
+  
+      peer.on('data', (data) => this.receiveMessage(data, this.props.addMessage));
+      peer.on('stream', (stream) => this.playVideo(stream));
+  
+      this.props.updatePeer(peer);
+    }, 
+    (error) => {console.log(error)});
+  }
 
-    peer.on('data', (data) => this.receiveMessage(data, this.props.addMessage));
-
-    this.props.updatePeer(peer);
+  playVideo(stream){
+    const video = document.createElement('video');
+    document.body.appendChild(video);
+    video.src = window.URL.createObjectURL(stream);
+    video.play();
   }
 
   renderUsers() {
