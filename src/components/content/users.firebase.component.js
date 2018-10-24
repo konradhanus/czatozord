@@ -31,7 +31,7 @@ class Users extends Component {
         const { peer } = this.props;
 
         var myself = newUsers[this.props.myFirebaseKey];
-        if (myself.callingUserKey && (!yourStun || myself.callingUserStun.sdp != yourStun.sdp)) {
+        if (myself.callingUserKey && (!yourStun || myself.callingUserStun.sdp !== yourStun.sdp)) {
           this.setState({
             yourStun: myself.callingUserStun,
             callingUserKey: myself.callingUserKey
@@ -55,7 +55,23 @@ class Users extends Component {
 
     this.props.peer.on('data', (data) => this.receiveMessage(data, this.props.addMessage));
 
+    this.props.peer.on('connect', () => {
+      navigator.getUserMedia({ video: true, audio: true }, (stream) => {
+        this.props.peer.addStream(stream)
+      }, function () {
+        console.log('Error');
+      })
+    })
+
+    this.props.peer.on('stream', this.playVideo);
+
     this.props.updatePeer(this.props.peer);
+  }
+
+  playVideo(stream) {
+    var video = document.querySelector('#video');
+    video.src = window.URL.createObjectURL(stream);
+    video.play();
   }
 
   receiveMessage(data, addMessage) {
@@ -67,23 +83,30 @@ class Users extends Component {
   }
 
   connectToUser(userId) {
-    const peer = new Peer({
-      initiator: true,
-      trickle: false
-    });
-
-    var userRef = this.state.firebase.database.ref(`users/${userId}`);
-    peer.on('signal', stun => {
-      this.setState({myStun: stun});
-      userRef.update({
-        callingUserStun: stun,
-        callingUserKey: this.props.myFirebaseKey
+    navigator.getUserMedia({ video: true, audio: true }, (stream) => {
+      const peer = new Peer({
+        initiator: true,
+        trickle: false,
+        stream: stream
       });
-    });
 
-    peer.on('data', (data) => this.receiveMessage(data, this.props.addMessage));
+      var userRef = this.state.firebase.database.ref(`users/${userId}`);
+      peer.on('signal', stun => {
+        this.setState({myStun: stun});
+        userRef.update({
+          callingUserStun: stun,
+          callingUserKey: this.props.myFirebaseKey
+        });
+      });
+  
+      peer.on('data', (data) => this.receiveMessage(data, this.props.addMessage));
 
-    this.props.updatePeer(peer);
+      peer.on('stream', this.playVideo);
+
+      this.props.updatePeer(peer);
+    }, function () {
+      console.log('Error');
+    })
   }
 
   renderUsers() {
