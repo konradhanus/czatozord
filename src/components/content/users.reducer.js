@@ -1,18 +1,6 @@
 import { ADD_USER } from "./users.constants";
 
 const initialState = [
-  {
-    name: 'Konrad Hanus',
-  },
-  {
-    name: 'Igor Róg'
-  },
-  {
-    name: 'Łukasz Kobierski'
-  },
-  {
-    name: 'Fabrizio Iacovone'
-  }
 ];
 
 function usersReducer(state = initialState, action) {

@@ -5,6 +5,8 @@ import { setFirebaseKey, updatePeer } from './users.actions';
 import { addMessage } from './messenger/messenger.actions';
 import firebase from '../../firebase';
 import Peer from 'simple-peer';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class Users extends Component {
   constructor(props) {
@@ -37,6 +39,7 @@ class Users extends Component {
             callingUserKey: myself.callingUserKey
            });
           peer.signal(myself.callingUserStun);
+          toast("Dzwonie!");
         }
       }
     });
@@ -60,6 +63,7 @@ class Users extends Component {
         this.props.peer.addStream(stream)
       }, function () {
         console.log('Error');
+        toast("Błąd połączenia 1");
       })
     })
 
@@ -72,6 +76,7 @@ class Users extends Component {
     var video = document.querySelector('#video');
     video.src = window.URL.createObjectURL(stream);
     video.play();
+    toast("Rozmowa wideo rozpoczęta!");
   }
 
   receiveMessage(data, addMessage) {
@@ -80,10 +85,13 @@ class Users extends Component {
       isHost: false 
     }
     addMessage(newMessage);
+    toast("Nowa wiadomość!");
   }
 
   connectToUser(userId) {
+    toast("Uwaga! Uruchamiam kamerę video i mikrofon");
     navigator.getUserMedia({ video: true, audio: true }, (stream) => {
+      toast("Kamera video i mikrofon uruchomione");
       const peer = new Peer({
         initiator: true,
         trickle: false,
@@ -97,6 +105,7 @@ class Users extends Component {
           callingUserStun: stun,
           callingUserKey: this.props.myFirebaseKey
         });
+        toast("Dzwonię");
       });
   
       peer.on('data', (data) => this.receiveMessage(data, this.props.addMessage));
@@ -106,21 +115,28 @@ class Users extends Component {
       this.props.updatePeer(peer);
     }, function () {
       console.log('Error');
+      toast("Błąd połączenia 2");
     })
   }
 
   renderUsers() {
     const { users } = this.state;
     const { myFirebaseKey } = this.props;
-
+    
     return (
-      users && Object.keys(users).map((userId) =>
-        (<li
+      users && Object.keys(users).reverse().map((userId, key) => {
+       
+       if(key < 8){
+        return (<li
           className={"list-group-item " + (myFirebaseKey === userId ? "user-highlight" : "")} 
           key={userId}
           onClick={(e) => this.connectToUser(userId)}>
           {users[userId].name}
         </li>)
+        }else{
+          return null;
+        }
+      }
       )
     )
   }
@@ -134,23 +150,15 @@ class Users extends Component {
 
     var newUserKey = users.push(user).key;
     this.props.setFirebaseKey(newUserKey);
-
+    toast("Cześć, "+this.refs.addUser.value +"!");
     this.refs.addUser.value = '';
   }
   
   render() {
+   console.log('render');
     return (
       <React.Fragment>
-        <div className="users-title">
-          <h6 className="title">Użytkownicy:</h6>
-        </div>
-        <div className="users-win">
-          <div className="users-list">
-            <ul id="myUL" className="list-group">
-              {this.renderUsers()}
-            </ul>
-          </div>
-        </div>
+        <ToastContainer />
         <div className="new-user">
           <h6 className="title">Nowy użytkownik:</h6>
           <input
@@ -165,6 +173,17 @@ class Users extends Component {
             Dodaj
           </button>
         </div>
+        <div className="users-title">
+          <h6 className="title">Użytkownicy:</h6>
+        </div>
+        <div className="users-win">
+          <div className="users-list">
+            <ul id="myUL" className="list-group">
+              {this.renderUsers()}
+            </ul>
+          </div>
+        </div>
+        
       </React.Fragment>
     );
   }
