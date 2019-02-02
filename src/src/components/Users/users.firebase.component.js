@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { setFirebaseKey, updatePeer } from './users.actions';
-import { addMessage } from './messenger/messenger.actions';
-import firebase from '../../firebase';
+import { setFirebaseKey, updatePeer } from './action';
+import { addMessage } from '../Messenger/action';
+import firebase from '../../../firebase';
 import Peer from 'simple-peer';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -74,7 +74,7 @@ class Users extends Component {
 
   playVideo(stream) {
     var video = document.querySelector('#video');
-    video.src = window.URL.createObjectURL(stream);
+    video.srcObject = stream;
     video.play();
     toast("Rozmowa wideo rozpoczęta!");
   }

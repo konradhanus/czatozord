@@ -1,4 +1,4 @@
-import { SELECT_USER, ADD_USER } from './users.constants';
+import { SELECT_USER, ADD_USER } from './../Users/action';
 
 function userSelectedReducer(state = null, action) {
   switch (action.type) {

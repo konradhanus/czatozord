@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import usersReducer from './components/content/users.reducer';
-import userSelectedReducer from './components/content/userSelected.reducer';
-import firebaseKeyReducer from './components/content/firebaseKey.reducer';
-import peerReducer from './components/content/peer.reducer';
-import messengerReducer from './components/content/messenger/messenger.reducer';
+import usersReducer from './src/components/Users/reducer';
+import userSelectedReducer from './src/components/Users/userSelected.reducer';
+import firebaseKeyReducer from './src/components/Content/firebaseKey.reducer';
+import peerReducer from './src/components/Content/peer.reducer';
+import messengerReducer from './src/components/Messenger/reducer';
 
 export default combineReducers({
   users: usersReducer,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { addMessage } from './messenger.actions';
+import { addMessage } from './action';
 
 class Messenger extends Component {
   renderMessages (messages) {

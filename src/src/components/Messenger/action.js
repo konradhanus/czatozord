@@ -1,4 +1,4 @@
-import { ADD_MESSAGE } from './messenger.constants';
+export const ADD_MESSAGE = 'ADD_MESSAGE';
 
 export const addMessage = (message) => {
   return {

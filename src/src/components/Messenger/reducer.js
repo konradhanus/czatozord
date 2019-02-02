@@ -1,4 +1,4 @@
-import { ADD_MESSAGE } from "./messenger.constants";
+import { ADD_MESSAGE } from "./action";
 
 const initialState = []
 

@@ -1,5 +1,5 @@
 import Peer from 'simple-peer';
-import { UPDATE_PEER } from "./users.constants";
+import { UPDATE_PEER } from "./../Users/action";
 
 const initialState = new Peer ({
   initiator: false,

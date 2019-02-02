@@ -1,4 +1,4 @@
-import { ADD_USER } from "./users.constants";
+import { ADD_USER } from "./action";
 
 const initialState = [
 ];
