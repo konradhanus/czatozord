@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { setFirebaseKey, updatePeer } from './action';
 import { addMessage } from '../Messenger/action';
-import firebase from '../../../firebase';
+import firebase from './../../firebase';
 import Peer from 'simple-peer';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -158,21 +158,25 @@ class Users extends Component {
    console.log('render');
     return (
       <React.Fragment>
-        <ToastContainer />
+        <ToastContainer />{!this.props.myFirebaseKey && 
+        <React.Fragment>
         <div className="new-user">
-          <h6 className="title">Nowy użytkownik:</h6>
+          <h6 className="title">Logowanie</h6>
           <input
             type="text"
             className="form-control"
-            placeholder="Wpisz nazwę"
+            placeholder="Podaj swój nick"
             ref="addUser" />
           <button
             type="button"
             className="btn btn-primary"
             onClick={() => this.addUser()}>
-            Dodaj
+            Połącz
           </button>
         </div>
+        </React.Fragment>
+        }
+        {this.props.myFirebaseKey && <React.Fragment>
         <div className="users-title">
           <h6 className="title">Użytkownicy:</h6>
         </div>
@@ -183,6 +187,7 @@ class Users extends Component {
             </ul>
           </div>
         </div>
+        </React.Fragment> }
         
       </React.Fragment>
     );

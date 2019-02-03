@@ -1,16 +1,27 @@
 import React, { Component } from 'react';
 import './App.css';
+import Chat from './components/chat.component';
+import Users from './components/Users/users.firebase.component';
+import { connect } from 'react-redux';
 
-import Chat from './src/components/chat.component';
 
 class App extends Component {
   render() {
     return (
       <React.Fragment>
-        <Chat />
+         {this.props.myFirebaseKey?<Chat />: <div className="container-fluid"><Users /></div>}
+       
       </React.Fragment>
     );
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    myFirebaseKey: state.myFirebaseKey
+  }
+}
+
+
+export default connect(mapStateToProps, null)(App);
+
