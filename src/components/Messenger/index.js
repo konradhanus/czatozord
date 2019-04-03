@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { addMessage } from './action';
+import { ToastContainer, toast } from 'react-toastify';
 
 class Messenger extends Component {
-  renderMessages (messages) {
+
+  renderMessages(messages) {
     return (
       messages.map((message, i) => {
         return message.isHost
@@ -18,7 +20,7 @@ class Messenger extends Component {
           :
           <div className="avatar-message-left-client" key={i}>
             <div className="avatar-left">
-              <img className="avatar-rounded" src="rsc/img_avatar.png" alt="Avatar" style={{width: 200}} />
+              <img className="avatar-rounded" src="rsc/img_avatar.png" alt="Avatar" style={{ width: 200 }} />
             </div>
             <div className="conversation avatar-left">
               {message.text}
@@ -29,23 +31,35 @@ class Messenger extends Component {
   }
 
   addMessage() {
-    const { peer } = this.props;
-    
-    var newMessage = { text: this.refs.message.value, isHost: true };
-    this.props.addMessage(newMessage);
-    peer.send(this.refs.message.value);
-    this.refs.message.value = '';
+    try {
+      const { peer } = this.props;
+      var newMessage = { text: this.refs.message.value, isHost: true };
+      peer.send(this.refs.message.value);
+      this.props.addMessage(newMessage);
+      this.refs.message.value = '';
+    } catch (e) {
+      console.log(e);
+      this.refs.message.value = '';
+      toast("Nie mozesz wysłać wiadomości, najpierw połącz się z kimś.");
+    }
+  }
+
+  onKeyPress(e) {
+   
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      this.addMessage();
+    }
   }
   render() {
-    const { messages } = this.props;
-
+    const { messages, peer } = this.props;
     return (
-      <React.Fragment>
+      peer.send && <React.Fragment>
         <div className="chat-win">
           {this.renderMessages(messages)}
         </div>
 
-        <div className="msg-send">
+        <div className="msg-send" onKeyPress={(e) => this.onKeyPress(e)}>
           <textarea className="form-control" ref="message" ref="message" placeholder="Twoja wiadomość" rows={2} id="msg-txt-area" defaultValue={""} />
           <div className="btns-misc">
             <button className="btn" data-toggle="tooltip" data-placement="left" title="Wstaw emotikon">

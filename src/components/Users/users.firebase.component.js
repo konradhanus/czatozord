@@ -39,7 +39,7 @@ class Users extends Component {
             callingUserKey: myself.callingUserKey
            });
           peer.signal(myself.callingUserStun);
-          toast("Dzwonie!");
+          toast.warning("Dzwonie!");
         }
       }
     });
