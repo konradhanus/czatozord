@@ -143,7 +143,8 @@ class Users extends Component {
 
   addUser() {
     var user = {
-      name: this.refs.addUser.value
+      name: this.refs.addUser.value, 
+      status: 'online'
     }
 
     const users = this.state.firebase.database.ref('users');
@@ -153,6 +154,14 @@ class Users extends Component {
     toast("Cześć, "+this.refs.addUser.value +"!");
     this.refs.addUser.value = '';
   }
+
+  onKeyPress(e) {
+   
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      this.addUser();
+    }
+  }
   
   render() {
    console.log('render');
@@ -160,6 +169,14 @@ class Users extends Component {
       <React.Fragment>
         <ToastContainer />{!this.props.myFirebaseKey && 
         <React.Fragment>
+          <div style={{ position: 'absolute',
+                        margin: 'auto',
+                        top: -300,
+                        right: 0,
+                        bottom: 0,
+                        left: 0,
+                        width: '400px',
+                        height: '100px'}} onKeyPress={(e) => this.onKeyPress(e)}>
         <div className="new-user">
           <h6 className="title">Logowanie</h6>
           <input
@@ -171,8 +188,10 @@ class Users extends Component {
             type="button"
             className="btn btn-primary"
             onClick={() => this.addUser()}>
+
             Połącz
           </button>
+        </div>
         </div>
         </React.Fragment>
         }

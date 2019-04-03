@@ -1,4 +1,4 @@
-import { SET_MYFIREBASEKEY } from './../Users/action';
+import { SET_MYFIREBASEKEY } from './../../containers/Users/action';
 
 function firebaseKeyReducer(state = null, action) {
   switch (action.type) {

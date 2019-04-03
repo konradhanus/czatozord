@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-import Chat from './components/chat.component';
-import Users from './components/Users/users.firebase.component';
+import Chat from './components/Chat';
+import Users from './containers/Users/users.firebase.component';
 import { connect } from 'react-redux';
 
 

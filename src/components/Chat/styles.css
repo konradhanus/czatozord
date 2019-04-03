@@ -1,5 +1,5 @@
 body {
-    background-image: url("rsc/bg-login.jpg");
+    background-image: url("./../rsc/bg-login.jpg");
     background-size: cover;
 }
 
