@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import Video from '../Video';
 import Messenger from './../../containers/Messenger'
-import Users from './../../containers/Users/users.firebase.component';
+import Users from './../../containers/Users';
 
 class Content extends Component {
   render() {
