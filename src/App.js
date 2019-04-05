@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import Chat from './components/Chat';
+import Chat from './containers/Chat';
 import Users from './containers/Users';
 import { connect } from 'react-redux';
 

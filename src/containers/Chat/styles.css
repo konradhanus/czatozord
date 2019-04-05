@@ -1,14 +1,10 @@
 body {
-    background-image: url("./../rsc/bg-login.jpg");
+    background-image: url("./../../components/rsc/bg-login.jpg");
     background-size: cover;
 }
 
 
-.max-height{
-    height: 100%;
-    width: 100%;
-    position: absolute;
-}
+
 
 #rememberme {
     float: left;

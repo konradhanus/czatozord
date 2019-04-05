@@ -20,19 +20,103 @@ class Users extends Component {
       firebase: {
         database: firebase.database()
       },
-      myFirebaseKey: null
+      myFirebaseKey: null,
+      graph: new window.P2PGraph('.torrent-graph'),
+      graphNodeAdded: []
     }
-
-
-
   }
   
+ /*
+  graph.add({
+    id: 'Thing1',
+    me: false,
+    name: '192.168.1.20'
+  })
+  graph.add({
+    id: 'Thing2',
+    me: false,
+    name: '192.168.1.44'
+  })
+
+  setTimeout(() => {
+    graph.connect('You', 'Thing1')
+  }, 1000)
+
+  setTimeout(() => {
+    graph.rate('You', 'Thing1', 150 * 1000) // 150 KB/s
+  }, 2000)
+
+  setTimeout(() => {
+    console.log('TODO: choke() - set opacity to 0.5')
+    graph.choke('You', 'Thing1')
+  }, 8000)
+
+  setTimeout(() => {
+    console.log('TODO: unchoke() - get back to default link opacity')
+    graph.unchoke('You', 'Thing1')
+  }, 9000)
+
+  setTimeout(() => {
+    graph.disconnect('You', 'Thing1')
+  }, 10000)
+
+  setTimeout(() => {
+    graph.remove('Thing1')
+  }, 11000)
+
+  setTimeout(() => {
+    graph.seed('Thing2', true)
+  }, 12000)
+
+*/
   componentDidMount() {
-
-
 
     this.state.firebase.database.ref('users').on('value', (snapshot) => {
       const newUsers = snapshot.val();
+ 
+      const { users } = this.state;
+      const { myFirebaseKey } = this.props;
+     
+      users && Object.keys(users).reverse().map((userId, key) => {
+
+        let newUser = null;
+      if(myFirebaseKey !== userId) {
+          newUser = {
+            id: userId,
+            me: false,
+            name: users[userId].name
+          }
+        }else
+          {
+             newUser = {
+              id: userId,
+              me: true,
+              name: users[userId].name
+          }
+        }
+
+          console.log('nowyUser',newUser); 
+          //pobierz state 
+          const graphNodeAdded = this.state.graphNodeAdded;
+          
+          //sprawdz czy juz nie istnieje
+          let ifAdd = true;
+          graphNodeAdded.map((node, k) => {
+            if(userId === node.id){
+             ifAdd = false;
+            }
+          });
+
+          if(ifAdd){
+            this.state.graph.add(newUser);
+            //dodaj do statu nowy obiekt
+            graphNodeAdded.push(newUser);
+            console.log(graphNodeAdded);
+            this.setState({graphNodeAdded:graphNodeAdded})
+          }
+        }
+      );
+
       this.setState({ users: newUsers });
 
       if (this.props.myFirebaseKey) {
@@ -133,6 +217,11 @@ class Users extends Component {
     return (
       users && Object.keys(users).reverse().map((userId, key) => {
 
+
+      
+       
+      
+
         if (key < 8) {
           return (<li
             className={"list-group-item " + (myFirebaseKey === userId ? "user-highlight" : "")}
@@ -163,12 +252,9 @@ class Users extends Component {
 
 
     var newUserKey = users.push(user).key;
-    console.log(newUserKey);
+    
     this.props.setFirebaseKey(newUserKey);
-
-
-
-
+    
     toast("Cześć, " + this.refs.addUser.value + "!");
     this.refs.addUser.value = '';
   }
@@ -184,11 +270,10 @@ class Users extends Component {
 
 
   render() {
-    console.log('render');
-    
-      console.log('ahha')
+
+    console.log(this.state.graphNodeAdded);
       if(this.props.myFirebaseKey){
-        console.log(this.props.myFirebaseKey);
+  
         this.state.firebase.database.ref('users/' + this.props.myFirebaseKey).onDisconnect().update({ status: 'offline' });
       }
    

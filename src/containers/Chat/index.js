@@ -3,9 +3,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles.css';
 import { connect } from 'react-redux';
 
-import Header from './../Header';
-import Content from './../Content';
-import Footer from './../Footer';
+import Header from './../../components/Header';
+import Content from './../../components/Content';
+import Footer from './../../components/Footer';
 
 import firebase from './../../firebase';
 
@@ -66,7 +66,7 @@ class Chat extends Component {
   render() {
     console.log(this.props);
     return (
-      <div className="container-fluid max-height" onMouseEnter={()=>this.onMouseEnter()}>
+      <div className="container-fluid " onMouseEnter={()=>this.onMouseEnter()}>
         <Header />
         <Content />
         <Footer />
