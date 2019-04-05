@@ -141,6 +141,7 @@ class Users extends Component {
             {users[userId].name}  
             {users[userId].status === "offline" && <span class="badge badge-danger">{users[userId].status}</span>}
             {users[userId].status === "online" && <span class="badge badge-success">{users[userId].status}</span>}
+            {users[userId].status === "away" && <span class="badge badge-warning">{users[userId].status}</span>}
 
           </li>)
         } else {
@@ -179,6 +180,8 @@ class Users extends Component {
       this.addUser();
     }
   }
+
+
 
   render() {
     console.log('render');

@@ -6,11 +6,15 @@ import { connect } from 'react-redux';
 
 
 class App extends Component {
+  
+
   render() {
     return (
       <React.Fragment>
          {this.props.myFirebaseKey?
-         <Chat />: 
+         <React.Fragment>
+         <Chat />
+         </React.Fragment>: 
          <div className="container-fluid">
          <Users />
          </div>}

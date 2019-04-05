@@ -3,6 +3,13 @@ body {
     background-size: cover;
 }
 
+
+.max-height{
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+
 #rememberme {
     float: left;
 }
