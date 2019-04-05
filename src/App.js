@@ -3,7 +3,7 @@ import './App.css';
 import Chat from './containers/Chat';
 import Users from './containers/Users';
 import { connect } from 'react-redux';
-
+import SignIn from './containers/SignIn';
 
 class App extends Component {
   
@@ -16,7 +16,7 @@ class App extends Component {
          <Chat />
          </React.Fragment>: 
          <div className="container-fluid">
-         <Users />
+         <SignIn />
          </div>}
        
       </React.Fragment>
