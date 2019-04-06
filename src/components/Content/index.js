@@ -10,10 +10,10 @@ class Content extends Component {
         <div className="col-lg-5">
           <Video />
         </div>
-        <div className="col-lg-5">
+        <div className="col-lg-4">
           <Messenger />
         </div>
-        <div className="col-lg-2">
+        <div className="col-lg-3">
           <Users />
         </div>
     

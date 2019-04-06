@@ -22,7 +22,8 @@ class Users extends Component {
       },
       myFirebaseKey: null,
       graph: new window.P2PGraph(".torrent-graph"),
-      graphNodeAdded: []
+      graphNodeAdded: [],
+      callUser: null
     };
   }
 
@@ -141,8 +142,10 @@ class Users extends Component {
             yourStun: myself.callingUserStun,
             callingUserKey: myself.callingUserKey
           });
+
           peer.signal(myself.callingUserStun);
-          toast.warning("Dzwonie!");
+          toast.warning("Dzwonie do użytkownika!");
+
           try {
             this.state.graph.connect(
               this.props.myFirebaseKey,
@@ -193,7 +196,7 @@ class Users extends Component {
     var video = document.querySelector("#video");
     video.srcObject = stream;
     video.play();
-    toast("Rozmowa wideo rozpoczęta!");
+    toast.success("Połączono");
   }
 
   receiveMessage(data, addMessage) {
@@ -206,23 +209,18 @@ class Users extends Component {
   }
 
   connectToUser(userId) {
-    toast("Uwaga! Uruchamiam kamerę video i mikrofon");
+    toast("0. Uwaga! Uruchamiam kamerę video i mikrofon");
+    this.setState({ callUser: userId });
     navigator.getUserMedia(
       { video: true, audio: true },
       stream => {
-        toast("Kamera video i mikrofon uruchomione");
+        toast("1. Kamera video i mikrofon uruchomione");
 
-
-      
-
-       try{
-         
-        this.state.graph.connect(this.props.myFirebaseKey, userId);
-        
-       }
-       catch(e){
-        toast("W grafie nie ma jeszcze takiego noda");
-       }
+        try {
+          this.state.graph.connect(this.props.myFirebaseKey, userId);
+        } catch (e) {
+          toast("W grafie nie ma jeszcze takiego noda");
+        }
 
         const peer = new Peer({
           initiator: true,
@@ -231,13 +229,14 @@ class Users extends Component {
         });
 
         var userRef = this.state.firebase.database.ref(`users/${userId}`);
+
         peer.on("signal", stun => {
           this.setState({ myStun: stun });
           userRef.update({
             callingUserStun: stun,
             callingUserKey: this.props.myFirebaseKey
           });
-          toast("Dzwonię");
+          toast("2. Dzwonię");
         });
 
         peer.on("data", data =>
@@ -248,8 +247,8 @@ class Users extends Component {
 
         this.props.updatePeer(peer);
       },
-      function() {
-        console.log("Error");
+      (e)=> {
+        console.log("Error", e);
         toast("Błąd połączenia 2");
       }
     );
@@ -259,7 +258,7 @@ class Users extends Component {
     console.log(this.state.graphNodeAdded);
     const { users } = this.state;
     const { myFirebaseKey } = this.props;
-
+    console.log(users, myFirebaseKey);
     return (
       <React.Fragment>
         <ToastContainer />
@@ -270,38 +269,49 @@ class Users extends Component {
           <div className="users-win">
             <div className="users-list">
               <ul id="myUL" className="list-group">
+                {users[myFirebaseKey] && (
+                  <li
+                    className={"list-group-item " + "user-highlight"}
+                    key={myFirebaseKey}
+                  >
+                    {" "}
+                    {users[myFirebaseKey].name}{" "}
+                  </li>
+                )}
                 {users &&
                   Object.keys(users)
                     .reverse()
                     .map((userId, key) => {
                       if (key < 8) {
-                        return (
-                          <li
-                            className={
-                              "list-group-item " +
-                              (myFirebaseKey === userId ? "user-highlight" : "")
-                            }
-                            key={userId}
-                            onClick={e => this.connectToUser(userId)}
-                          >
-                            {users[userId].name}
-                            {users[userId].status === "offline" && (
-                              <span class="badge badge-danger">
-                                {users[userId].status}
-                              </span>
-                            )}
-                            {users[userId].status === "online" && (
-                              <span class="badge badge-success">
-                                {users[userId].status}
-                              </span>
-                            )}
-                            {users[userId].status === "away" && (
-                              <span class="badge badge-warning">
-                                {users[userId].status}
-                              </span>
-                            )}
+                        return myFirebaseKey !== userId ? (
+                          <li className={"list-group-item"} key={userId}>
+                            <React.Fragment>
+                              <button
+                                className="btn btn-success btn-sm"
+                                onClick={e => this.connectToUser(userId)}
+                                disabled={this.state.callUser && "disabled"}
+                              >
+                                <i class="fas fa-video" /> Połącz
+                              </button>{" "}
+                              {users[userId].status === "offline" && (
+                                <span class="badge badge-danger float-right">
+                                  {users[userId].status}
+                                </span>
+                              )}
+                              {users[userId].status === "online" && (
+                                <span class="badge badge-success float-right">
+                                  {users[userId].status}
+                                </span>
+                              )}
+                              {users[userId].status === "away" && (
+                                <span class="badge badge-warning float-right">
+                                  {users[userId].status}
+                                </span>
+                              )}{" "}
+                              {users[userId].name}{" "}
+                            </React.Fragment>
                           </li>
-                        );
+                        ) : null;
                       } else {
                         return null;
                       }
