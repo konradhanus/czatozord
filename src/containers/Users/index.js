@@ -70,6 +70,16 @@ class Users extends Component {
 
 */
   componentDidMount() {
+    const myFirebaseKey = this.props.myFirebaseKey;
+    if (myFirebaseKey) {
+      const p = this.state.firebase.database
+        .ref("users/" + myFirebaseKey)
+        .onDisconnect()
+        .remove();
+
+      console.log(this.state.graphNodeAdded);
+    }
+
     this.state.firebase.database.ref("users").on("value", snapshot => {
       const newUsers = snapshot.val();
 
@@ -202,7 +212,17 @@ class Users extends Component {
       stream => {
         toast("Kamera video i mikrofon uruchomione");
 
+
+      
+
+       try{
+         
         this.state.graph.connect(this.props.myFirebaseKey, userId);
+        
+       }
+       catch(e){
+        toast("W grafie nie ma jeszcze takiego noda");
+       }
 
         const peer = new Peer({
           initiator: true,
@@ -235,56 +255,10 @@ class Users extends Component {
     );
   }
 
-  renderUsers() {
-    const { users } = this.state;
-    const { myFirebaseKey } = this.props;
-
-    return (
-      users &&
-      Object.keys(users)
-        .reverse()
-        .map((userId, key) => {
-          if (key < 8) {
-            return (
-              <li
-                className={
-                  "list-group-item " +
-                  (myFirebaseKey === userId ? "user-highlight" : "")
-                }
-                key={userId}
-                onClick={e => this.connectToUser(userId)}
-              >
-                {users[userId].name}
-                {users[userId].status === "offline" && (
-                  <span class="badge badge-danger">{users[userId].status}</span>
-                )}
-                {users[userId].status === "online" && (
-                  <span class="badge badge-success">
-                    {users[userId].status}
-                  </span>
-                )}
-                {users[userId].status === "away" && (
-                  <span class="badge badge-warning">
-                    {users[userId].status}
-                  </span>
-                )}
-              </li>
-            );
-          } else {
-            return null;
-          }
-        })
-    );
-  }
-
   render() {
     console.log(this.state.graphNodeAdded);
-    if (this.props.myFirebaseKey) {
-      this.state.firebase.database
-        .ref("users/" + this.props.myFirebaseKey)
-        .onDisconnect()
-        .update({ status: "offline" });
-    }
+    const { users } = this.state;
+    const { myFirebaseKey } = this.props;
 
     return (
       <React.Fragment>
@@ -296,7 +270,42 @@ class Users extends Component {
           <div className="users-win">
             <div className="users-list">
               <ul id="myUL" className="list-group">
-                {this.renderUsers()}
+                {users &&
+                  Object.keys(users)
+                    .reverse()
+                    .map((userId, key) => {
+                      if (key < 8) {
+                        return (
+                          <li
+                            className={
+                              "list-group-item " +
+                              (myFirebaseKey === userId ? "user-highlight" : "")
+                            }
+                            key={userId}
+                            onClick={e => this.connectToUser(userId)}
+                          >
+                            {users[userId].name}
+                            {users[userId].status === "offline" && (
+                              <span class="badge badge-danger">
+                                {users[userId].status}
+                              </span>
+                            )}
+                            {users[userId].status === "online" && (
+                              <span class="badge badge-success">
+                                {users[userId].status}
+                              </span>
+                            )}
+                            {users[userId].status === "away" && (
+                              <span class="badge badge-warning">
+                                {users[userId].status}
+                              </span>
+                            )}
+                          </li>
+                        );
+                      } else {
+                        return null;
+                      }
+                    })}
               </ul>
             </div>
           </div>
